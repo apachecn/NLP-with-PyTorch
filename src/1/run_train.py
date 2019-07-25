@@ -397,7 +397,7 @@ if __name__ == "__main__":
     save_every = 500
     n_iteration = 6000
 
-    loadFilename = "data/save/cb_model/%s/2-2_500/4000_checkpoint.tar" % corpus_name
+    loadFilename = "data/save/cb_model/%s/2-2_500/6000_checkpoint.tar" % corpus_name
     if os.path.exists(loadFilename):
         voc = Voc(corpus_name)
     cp_start_iteration, voc, encoder, decoder, encoder_optimizer, decoder_optimizer, embedding = load_model(loadFilename, voc, cp_start_iteration, attn_model, hidden_size, encoder_n_layers, decoder_n_layers, dropout, learning_rate, decoder_learning_ratio)
