@@ -394,8 +394,8 @@ if __name__ == "__main__":
     clip = 50.0
     print_every = 1
     batch_size = 64
-    save_every = 500
-    n_iteration = 6050
+    save_every = 1000
+    n_iteration = 7000
 
     loadFilename = "data/save/cb_model/%s/2-2_500/6000_checkpoint.tar" % corpus_name
     if os.path.exists(loadFilename):
