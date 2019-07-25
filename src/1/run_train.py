@@ -246,6 +246,8 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
 
     # Forward pass through encoder
     encoder_outputs, encoder_hidden = encoder(input_variable, lengths)
+    encoder_outputs = encoder_outputs.to(device)
+    encoder_hidden = encoder_hidden.to(device)
 
     # Create initial decoder input (start with SOS tokens for each sentence)
     decoder_input = torch.LongTensor([[SOS_token for _ in range(batch_size)]])
@@ -253,6 +255,7 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
 
     # Set initial decoder hidden state to the encoder's final hidden state
     decoder_hidden = encoder_hidden[:decoder.n_layers]
+    decoder_hidden = decoder_hidden.to(device)
 
     # Determine if we are using teacher forcing this iteration
     use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
@@ -263,8 +266,13 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
             decoder_output, decoder_hidden = decoder(
                 decoder_input, decoder_hidden, encoder_outputs
             )
+            decoder_hidden = decoder_hidden.to(device)
+            decoder_hidden = decoder_hidden.to(device)
+
             # Teacher forcing: next input is current target
             decoder_input = target_variable[t].view(1, -1)
+            decoder_input = decoder_input.to(device)
+
             # Calculate and accumulate loss
             mask_loss, nTotal = maskNLLLoss(decoder_output, target_variable[t], mask[t])
             loss += mask_loss
@@ -395,7 +403,7 @@ if __name__ == "__main__":
     print_every = 1
     batch_size = 64
     save_every = 500
-    n_iteration = 6000
+    n_iteration = 6050
 
     loadFilename = "data/save/cb_model/%s/2-2_500/6000_checkpoint.tar" % corpus_name
     if os.path.exists(loadFilename):
@@ -405,6 +413,16 @@ if __name__ == "__main__":
     # Use appropriate device
     encoder = encoder.to(device)
     decoder = decoder.to(device)
+    for state in encoder_optimizer.state.values():
+        for k, v in state.items():
+            if isinstance(v, torch.Tensor):
+                state[k] = v.cuda()
+
+    for state in decoder_optimizer.state.values():
+        for k, v in state.items():
+            if isinstance(v, torch.Tensor):
+                state[k] = v.cuda()
+
     # Ensure dropout layers are in train mode
     encoder.train()
     decoder.train()
