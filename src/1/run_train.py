@@ -246,8 +246,6 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
 
     # Forward pass through encoder
     encoder_outputs, encoder_hidden = encoder(input_variable, lengths)
-    encoder_outputs = encoder_outputs.to(device)
-    encoder_hidden = encoder_hidden.to(device)
 
     # Create initial decoder input (start with SOS tokens for each sentence)
     decoder_input = torch.LongTensor([[SOS_token for _ in range(batch_size)]])
@@ -255,7 +253,6 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
 
     # Set initial decoder hidden state to the encoder's final hidden state
     decoder_hidden = encoder_hidden[:decoder.n_layers]
-    decoder_hidden = decoder_hidden.to(device)
 
     # Determine if we are using teacher forcing this iteration
     use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
@@ -266,13 +263,8 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
             decoder_output, decoder_hidden = decoder(
                 decoder_input, decoder_hidden, encoder_outputs
             )
-            decoder_hidden = decoder_hidden.to(device)
-            decoder_hidden = decoder_hidden.to(device)
-
             # Teacher forcing: next input is current target
             decoder_input = target_variable[t].view(1, -1)
-            decoder_input = decoder_input.to(device)
-
             # Calculate and accumulate loss
             mask_loss, nTotal = maskNLLLoss(decoder_output, target_variable[t], mask[t])
             loss += mask_loss
@@ -297,8 +289,8 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
     loss.backward()
 
     # Clip gradients: gradients are modified in place
-    _ = nn.utils.clip_grad_norm_(encoder.parameters(), clip)
-    _ = nn.utils.clip_grad_norm_(decoder.parameters(), clip)
+    _ = torch.nn.utils.clip_grad_norm_(encoder.parameters(), clip)
+    _ = torch.nn.utils.clip_grad_norm_(decoder.parameters(), clip)
 
     # Adjust model weights
     encoder_optimizer.step()
