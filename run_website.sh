@@ -18,6 +18,9 @@ echo "python3 src/script.py gitalk"
 python3 src/script.py "gitalk"
 
 gitbook build ./ _book
+gitbook epub . books/nlp-pytorch-zh.epub
+gitbook mobi . books/nlp-pytorch-zh.mobi
+mv books _book
 
 # rm -rf /opt/apache-tomcat-9.0.17/webapps/test_book
 # cp -r _book /opt/apache-tomcat-9.0.17/webapps/test_book
