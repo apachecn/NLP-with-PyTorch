@@ -12,6 +12,7 @@
 
 * [在线阅读](https://nlp-pt.apachecn.org)
 * [代码地址](https://github.com/joosthub/PyTorchNLPBook)
+* 下载地址：[epub](https://raw.githubusercontent.com/apachecn/nlp-pytorch-zh/gh-pages/books/nlp-pytorch-zh.epub), [mobi](https://raw.githubusercontent.com/apachecn/nlp-pytorch-zh/gh-pages/books/nlp-pytorch-zh.mobi)
 * [ApacheCN 机器学习交流群 629470233](http://shang.qq.com/wpa/qunwpa?idkey=30e5f1123a79867570f665aa3a483ca404b1c3f77737bc01ec520ed5f078ddef)
 * [ApacheCN 学习资源](http://www.apachecn.org/)
 
